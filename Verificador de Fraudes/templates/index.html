@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h2>Analise um conteúdo</h2>
+  <form action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data" class="grid">
+    <div>
+      <label>Texto ou E-mail (cole aqui)</label>
+      <textarea name="input_text" rows="6" placeholder="Cole o texto do e-mail, mensagem, anúncio..."></textarea>
+    </div>
+
+    <div>
+      <label>ou URL</label>
+      <input type="url" name="input_url" placeholder="https://exemplo.com/mensagem">
+    </div>
+
+    <div>
+      <label>ou Arquivo (.eml ou imagem)</label>
+      <input type="file" name="input_file" accept=".eml,image/*">
+      <small>Suporta: .eml, .png, .jpg, .jpeg, .webp, .bmp</small>
+    </div>
+
+    <div class="actions">
+      <button type="submit">Analisar</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

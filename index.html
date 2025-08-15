@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portal — Verificador de Fraudes</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #121a2b; --text: #e6eefc; --muted: #9bb0d3;
+      --accent: #5aa9ff; --accent-2: #8bd7ff; --border: #22304d;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial,'Apple Color Emoji','Segoe UI Emoji';
+    }
+    .shell { display: grid; grid-template-rows: auto 1fr; height: 100vh; }
+    header { position: sticky; top: 0; z-index: 2; backdrop-filter: saturate(160%) blur(8px);
+      background: linear-gradient(180deg, rgba(11,18,32,0.85), rgba(11,18,32,0.65));
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner { max-width: 1200px; margin: 0 auto; }
+    .brand {
+      font-weight: 700; letter-spacing: .4px; color: var(--text);
+      padding: 12px 0; /* remove padding lateral */
+    }
+    nav {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding: 8px 0 12px 0; /* padding vertical, sem padding lateral */
+    }
+    .tab {
+      appearance: none; border: 1px solid var(--border); background: var(--card); color: var(--muted);
+      padding: 10px 14px; border-radius: 999px; cursor: pointer;
+      transition: transform .06s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+      box-shadow: 0 1px 0 rgba(0,0,0,.2), inset 0 0 0 0 rgba(90,169,255,.0);
+      text-decoration: none; user-select: none;
+    }
+    .tab:hover { transform: translateY(-1px); color: var(--text); }
+    .tab.active {
+      color: var(--text); border-color: transparent;
+      background: linear-gradient(180deg, rgba(26,41,68,0.9), rgba(20,30,52,0.9));
+      box-shadow: 0 8px 24px rgba(90,169,255,.18), inset 0 0 0 1px rgba(139,215,255,.18);
+    }
+    .iframe-wrap { height: calc(100vh - 96px); } /* ajuste para o header maior */
+    iframe { width: 100%; height: 100%; border: 0; background: var(--card); border-top: 1px solid var(--border); }
+    .notice {
+      margin: 24px auto; max-width: 900px; background: var(--card); border: 1px dashed var(--border);
+      padding: 16px; border-radius: 16px; color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="header-inner">
+        <div class="brand">Portal de Apps com IA</div>
+        <nav>
+          <button class="tab" data-app="verificador_de_fraudes">Verificador de Fraudes</button>
+          <!-- Futuro: adicionar mais botões aqui -->
+        </nav>
+      </div>
+    </header>
+    <div class="iframe-wrap">
+      <div id="notice" class="notice" style="display:none"></div>
+      <iframe id="appframe" src="" allow="clipboard-read; clipboard-write"></iframe>
+    </div>
+  </div>
+  <script>
+    const routes = { verificador_de_fraudes: "/verificador_de_fraudes" };
+    const frame = document.getElementById('appframe');
+    const notice = document.getElementById('notice');
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+
+    function setActive(app) {
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.app === app));
+      const target = routes[app];
+      if (target) {
+        notice.style.display = 'none';
+        frame.src = target;
+        history.replaceState(null, "", "#" + app);
+      } else {
+        frame.src = 'about:blank';
+        notice.style.display = 'block';
+        notice.innerHTML = `Não encontrei a rota <b>/${app}</b> no servidor Flask.`;
+      }
+    }
+
+    tabs.forEach(t => t.addEventListener('click', () => setActive(t.dataset.app)));
+    const initial = location.hash.replace('#','') || 'verificador_de_fraudes';
+    setActive(initial);
+  </script>
+</body>
+</html>

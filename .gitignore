@@ -1,0 +1,65 @@
+# --- Python / Flask (todos os apps do portal) ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.build/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# --- Ambientes virtuais ---
+.venv/
+.venv*/
+venv/
+env/
+
+# --- Configs locais / segredos ---
+.env
+*.env
+.env.*.local
+*.secret
+*.key
+*.pem
+
+# --- IDEs / SO ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Logs / temporários ---
+*.log
+*.tmp
+*.temp
+~$*
+*.swp
+*.swo
+
+# --- Portal de Apps ---
+# Imagens de debug do OCR (Verificador de Fraudes)
+verificador_de_fraudes/static/ocr_debug/
+
+# Uploads temporários (qualquer app)
+*/uploads/
+uploads/
+tmp/
+cache/
+
+# Arquivos de teste/exemplos não essenciais
+*/examples/*.eml
+*/examples/*.png
+*/examples/*.jpg
+
+# --- Node (se houver frontend separado em algum app) ---
+node_modules/
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
