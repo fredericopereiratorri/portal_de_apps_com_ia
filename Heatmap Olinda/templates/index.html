@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Calor - Olinda</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Mapa de Calor - Bairros de Olinda</h1>
+            <p class="subtitle">Densidade demográfica e pontos de interesse por bairro</p>
+        </header>
+
+        <div class="info-panel">
+            <div class="info-card">
+                <span class="info-icon">ℹ️</span>
+                <div>
+                    <strong>Como usar:</strong>
+                    <ul>
+                        <li>Passe o mouse sobre os bairros para ver todas as informações</li>
+                        <li>As cores indicam densidade: 🟢 Verde (baixa) → 🟡 Amarelo (média) → 🔴 Vermelho (alta)</li>
+                        <li>Dados incluem: demografia, escolaridade e pontos de interesse</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-card" style="margin-top: 15px; background: #fff3cd; border-left-color: #ffc107;">
+                <span class="info-icon">📊</span>
+                <div>
+                    <strong>Fontes dos Dados:</strong>
+                    <ul>
+                        <li><strong>Geometrias:</strong> Portal de Dados Abertos - Prefeitura do Olinda (2024)</li>
+                        <li><strong>População:</strong> Censo IBGE 2022 + Estimativas 2024</li>
+                        <li><strong>Escolaridade:</strong> Estimativas baseadas em padrões regionais (2024)</li>
+                        <li><strong>POIs:</strong> Estimativas baseadas em padrões urbanos (2024)</li>
+                        <li><strong>Última atualização:</strong> Outubro de 2025</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="map-wrapper">
+            {{ mapa|safe }}
+        </div>
+
+        <footer class="footer">
+            <p><strong>Nota:</strong> Dados compilados de fontes oficiais (IBGE, Prefeitura do Olinda) e estimativas estatísticas. Última atualização: Outubro 2025</p>
+        </footer>
+    </div>
+</body>
+</html>

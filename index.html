@@ -13,8 +13,9 @@
       <div class="header-inner">
         <div class="brand">Portal de Apps com IA</div>
         <nav>
-          <button class="tab" data-app="verificador_de_fraudes">Verificador de Fraudes</button>
-          <!-- Futuro: mais botões aqui -->
+          <button class="tab" data-app="heatmap">Mapa - Recife</button>
+          <button class="tab" data-app="heatmap_olinda">Mapa - Olinda</button>
+          <button class="tab" data-app="heatmap_jaboatao">Mapa - Jaboatão</button>
         </nav>
       </div>
     </header>
@@ -25,7 +26,11 @@
   </div>
 
   <script>
-    const routes = { verificador_de_fraudes: "/verificador_de_fraudes" };
+    const routes = {
+      heatmap: "/heatmap/",
+      heatmap_olinda: "/heatmap_olinda/",
+      heatmap_jaboatao: "/heatmap_jaboatao/"
+    };
     const frame  = document.getElementById('appframe');
     const notice = document.getElementById('notice');
     const tabs   = Array.from(document.querySelectorAll('.tab'));
@@ -45,7 +50,7 @@
     }
 
     tabs.forEach(t => t.addEventListener('click', () => setActive(t.dataset.app)));
-    const initial = location.hash.replace('#','') || 'verificador_de_fraudes';
+    const initial = location.hash.replace('#','');
     setActive(initial);
   </script>
 </body>

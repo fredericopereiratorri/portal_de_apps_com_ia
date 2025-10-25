@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python fetch_real_data.py:*)",
+      "WebSearch",
+      "Bash(python fetch_official_data.py:*)",
+      "Bash(python fetch_quick.py:*)",
+      "Bash(python:*)",
+      "Bash(.venvScriptspython.exe -m pip install -r requirements.txt)",
+      "Bash(.venv/Scripts/python.exe -m pip:*)",
+      "Bash(.venv/Scripts/python.exe:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(curl:*)",
+      "Bash(../.venv/Scripts/python.exe:*)",
+      "WebFetch(domain:www.condepefidem.pe.gov.br)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
