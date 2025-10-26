@@ -13,7 +13,9 @@
       "Bash(findstr:*)",
       "Bash(curl:*)",
       "Bash(../.venv/Scripts/python.exe:*)",
-      "WebFetch(domain:www.condepefidem.pe.gov.br)"
+      "WebFetch(domain:www.condepefidem.pe.gov.br)",
+      "Bash(tasklist:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []

@@ -24,6 +24,34 @@ def get_population_range(geojson_data):
     ]
     return min(populations), max(populations)
 
+def calculate_poder_aquisitivo(props):
+    """Calcula poder aquisitivo baseado em POIs e escolaridade"""
+    # Peso maior para shoppings e supermercados
+    pois_score = (
+        props.get('farmacias', 0) * 1 +
+        props.get('shoppings', 0) * 3 +
+        props.get('postos_gasolina', 0) * 1 +
+        props.get('supermercados', 0) * 2 +
+        props.get('escolas', 0) * 0.5
+    )
+
+    # Componente de escolaridade (superior tem mais peso)
+    educ_score = (
+        props.get('ensino_superior_pct', 0) * 3 +
+        props.get('ensino_medio_pct', 0) * 1.5
+    )
+
+    # Normalizar para escala 0-100
+    poder = min(100, (pois_score * 0.6) + (educ_score * 0.4))
+
+    # Classificar
+    if poder >= 70:
+        return "Alto"
+    elif poder >= 40:
+        return "Médio"
+    else:
+        return "Baixo"
+
 def create_folium_map():
     """Cria o mapa de calor interativo com Folium"""
 
@@ -57,13 +85,11 @@ def create_folium_map():
         population = props['populacao']
         color = colormap(population)
 
-        # Obter dados de escolaridade (pode não existir em dados antigos)
+        # Calcular poder aquisitivo e obter escolaridade
+        poder_aquisitivo = calculate_poder_aquisitivo(props)
         nivel_escolaridade = props.get('nivel_escolaridade', 'N/A')
-        ensino_superior = props.get('ensino_superior_pct', 0)
-        ensino_medio = props.get('ensino_medio_pct', 0)
-        ensino_fundamental = props.get('ensino_fundamental_pct', 0)
 
-        # Criar tooltip COMPLETO com todas as informações
+        # Criar tooltip reorganizado
         tooltip_html = f"""
         <div style="font-family: Arial; font-size: 13px; max-width: 320px; padding: 5px;">
             <h3 style="margin: 0 0 12px 0; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px;">
@@ -71,21 +97,11 @@ def create_folium_map():
             </h3>
 
             <div style="margin-bottom: 12px; padding: 8px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 5px; border-left: 4px solid #3498db;">
-                <b style="color: #2c3e50;">👥 Dados Demográficos</b><br>
+                <b style="color: #2c3e50;">📊 Dados do bairro</b><br>
                 <div style="margin-top: 6px; line-height: 1.6;">
                     <span style="color: #555;">População:</span> <b style="color: #2c3e50;">{props['populacao']:,}</b> hab<br>
-                    <span style="color: #555;">Área:</span> <b style="color: #2c3e50;">{props['area_km2']}</b> km²<br>
-                    <span style="color: #555;">Densidade:</span> <b style="color: #e74c3c;">{props['densidade']:,}</b> hab/km²
-                </div>
-            </div>
-
-            <div style="margin-bottom: 12px; padding: 8px; background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%); border-radius: 5px; border-left: 4px solid #f39c12;">
-                <b style="color: #2c3e50;">🎓 Escolaridade</b><br>
-                <div style="margin-top: 6px; line-height: 1.6;">
-                    <span style="color: #555;">Nível:</span> <b style="color: #2c3e50;">{nivel_escolaridade}</b><br>
-                    <span style="color: #555;">Ens. Superior:</span> <b style="color: #27ae60;">{ensino_superior}%</b><br>
-                    <span style="color: #555;">Ens. Médio:</span> <b style="color: #3498db;">{ensino_medio}%</b><br>
-                    <span style="color: #555;">Ens. Fundamental:</span> <b style="color: #e67e22;">{ensino_fundamental}%</b>
+                    <span style="color: #555;">Escolaridade:</span> <b style="color: #2c3e50;">{nivel_escolaridade}</b><br>
+                    <span style="color: #555;">Poder Aquisitivo:</span> <b style="color: #e67e22;">{poder_aquisitivo}</b>
                 </div>
             </div>
 
