@@ -180,40 +180,6 @@ def try_mount_heatmap():
 
 heatmap_app = try_mount_heatmap()
 
-# -------- localizar e montar o Heatmap Olinda --------
-def try_mount_heatmap_olinda():
-    for root in (
-        os.path.join(BASE_DIR, "heatmap olinda"),
-        os.path.join(BASE_DIR, "Heatmap Olinda"),
-    ):
-        if os.path.isdir(root):
-            log.info(f"[heatmap_olinda] procurando app em: {root}")
-            found = find_flask_app_file(root)
-            if found:
-                log.info(f"[heatmap_olinda] encontrado: {found}")
-                return load_flask_app(found)
-    log.warning("[heatmap_olinda] NÃO encontrado.")
-    return None
-
-heatmap_olinda_app = try_mount_heatmap_olinda()
-
-# -------- localizar e montar o Heatmap Jaboatão --------
-def try_mount_heatmap_jaboatao():
-    for root in (
-        os.path.join(BASE_DIR, "heatmap jaboatao"),
-        os.path.join(BASE_DIR, "Heatmap Jaboatao"),
-    ):
-        if os.path.isdir(root):
-            log.info(f"[heatmap_jaboatao] procurando app em: {root}")
-            found = find_flask_app_file(root)
-            if found:
-                log.info(f"[heatmap_jaboatao] encontrado: {found}")
-                return load_flask_app(found)
-    log.warning("[heatmap_jaboatao] NÃO encontrado.")
-    return None
-
-heatmap_jaboatao_app = try_mount_heatmap_jaboatao()
-
 # -------- app estático NÃO-CONDICIONAL para o verificador (elimina 304) --------
 ver_static_app = None
 ver_static_dir = None
@@ -255,34 +221,6 @@ if heatmap_static_app is not None:
     mounted["/heatmap/static"] = heatmap_static_app
 if heatmap_app is not None:
     mounted["/heatmap"] = heatmap_app
-
-# Montar Olinda
-if heatmap_olinda_app is not None:
-    log.info(f"[wsgi] Montando heatmap_olinda_app em /heatmap_olinda")
-    olinda_static_dir = getattr(heatmap_olinda_app, "static_folder", None)
-    if olinda_static_dir and os.path.isdir(olinda_static_dir):
-        olinda_static_app = Flask("heatmap_olinda_static", static_folder=olinda_static_dir)
-        @olinda_static_app.route("/<path:filename>")
-        def olinda_static_noconditional(filename):
-            return send_from_directory(olinda_static_dir, filename, conditional=False, max_age=0)
-        mounted["/heatmap_olinda/static"] = olinda_static_app
-    mounted["/heatmap_olinda"] = heatmap_olinda_app
-else:
-    log.warning("[wsgi] heatmap_olinda_app é None, não será montado")
-
-# Montar Jaboatão
-if heatmap_jaboatao_app is not None:
-    log.info(f"[wsgi] Montando heatmap_jaboatao_app em /heatmap_jaboatao")
-    jaboatao_static_dir = getattr(heatmap_jaboatao_app, "static_folder", None)
-    if jaboatao_static_dir and os.path.isdir(jaboatao_static_dir):
-        jaboatao_static_app = Flask("heatmap_jaboatao_static", static_folder=jaboatao_static_dir)
-        @jaboatao_static_app.route("/<path:filename>")
-        def jaboatao_static_noconditional(filename):
-            return send_from_directory(jaboatao_static_dir, filename, conditional=False, max_age=0)
-        mounted["/heatmap_jaboatao/static"] = jaboatao_static_app
-    mounted["/heatmap_jaboatao"] = heatmap_jaboatao_app
-else:
-    log.warning("[wsgi] heatmap_jaboatao_app é None, não será montado")
 
 application = DispatcherMiddleware(portal, mounted)
 
